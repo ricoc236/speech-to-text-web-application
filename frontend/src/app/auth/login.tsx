@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("") || null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -17,9 +18,30 @@ const Login = () => {
     }
 
     setError("");
-    console.log("Login successful:", { email, password });
+    
 
     //API call
+      try {
+        const response = await fetch("http://localhost:3001/auth/signin", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+          credentials: "include", 
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          setError(data.message || "Login failed");
+          return;
+        }
+
+        console.log("Login successful:", data);
+        navigate("/"); 
+      } catch (err) {
+        console.error(err);
+        setError("Something went wrong. Please try again.");
+      }
   };
 
   return (

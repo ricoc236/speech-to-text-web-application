@@ -26,7 +26,7 @@ return (
                 <button className="shadow-2xl text-[#C9FDF2] text-sm font-semibold hover:text-[#C9FDF2] rounded-full bg-black px-4 py-1"
                     onClick={() => navigate("/signup")}
                 >
-                    Signup
+                    Sign Up
                 </button>
 
             </div>

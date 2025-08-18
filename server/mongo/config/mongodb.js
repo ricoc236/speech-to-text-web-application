@@ -1,8 +1,9 @@
 // db.js
 const { MongoClient } = require('mongodb');
+require('dotenv').config();
 
 // Your MongoDB connection string
-const uri = 'mongodb://localhost:27017/textify';
+const uri = process.env.MONGO_URI;
 const client = new MongoClient(uri);
 
 // Use a variable to hold the connected database instance
@@ -11,7 +12,7 @@ let db;
 async function connectDB() {
     try {
         await client.connect();
-        db = client.db('textify');
+        db = client.db(process.env.MONGO_NAME);
         console.log('Connected to MongoDB');
     } catch (error) {
         console.error('Error connecting to MongoDB:', error);

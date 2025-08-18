@@ -1,19 +1,20 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    //validation checks (will double check with backend)
+    // frontend validations...
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-     if (username.trim().length < 3 || username.trim().length > 15) {
+    if (username.trim().length < 3 || username.trim().length > 15) {
       setError("Username must be between 3 and 15 characters.");
       return;
     }
@@ -31,10 +32,30 @@ const Signup = () => {
     }
 
     setError("");
-    console.log("Signup successful:", { username, email, password });
 
-    //api call
+    try {
+      //http://localhost:3001 `${import.meta.env.VITE_API_URL}/signup`
+      const response = await fetch(`http://localhost:3001/auth/signup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, email, password, confirmPassword }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.message ||  "Signup failed");
+        return;
+      }
+
+      console.log("Signup successful:", data);
+      navigate("/login");
+    } catch (err) {
+      console.error(err);
+      setError("Something went wrong. Please try again.");
+    }
   };
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#B6f2d1]">
