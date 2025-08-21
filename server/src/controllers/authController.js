@@ -98,7 +98,7 @@ async function signin(req, res) {
       }
 
       //successful login and generate JWT token
-      const token = jwt.sign({ email: email }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
+      const token = jwt.sign({ user: user.username }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
       res.cookie('token', token, {
           httpOnly: true,
           sameSite: 'Strict', 
@@ -110,4 +110,16 @@ async function signin(req, res) {
     return res.status(500).json({ message: 'Internal server error' });
   }
 }
-module.exports = { signup, signin };
+
+
+async function getuser(req, res) {
+  try {
+    const token = req.cookies.token;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    res.json({ username: decoded.user });
+  } catch (error) {
+    console.error('Get user error:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+}
+module.exports = { signup, signin, getuser };

@@ -22,7 +22,7 @@ const Login = () => {
 
     //API call
       try {
-        const response = await fetch("http://localhost:3001/auth/signin", {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/signin`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password }),
