@@ -6,14 +6,11 @@ services:
     ports:
       - "3001:3001"
     environment:
-      # This will now be read from your .env file
       MONGO_URI: ${MONGO_URI}
       PORT: 3001
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
       MONGO_NAME: ${MONGO_NAME}
-
-    # The 'depends_on' and 'mongo' service are removed
     dns:
       - 8.8.8.8
       - 8.8.4.4
