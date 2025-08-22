@@ -24,7 +24,7 @@ app.use(helmet());
 app.use(morgan('common'));
 app.use(cors({
     //http://localhost:5173
-    origin: 'https://speech-to-text-web-application.vercel.app/',
+    origin: 'https://speech-to-text-web-application.vercel.app',
     credentials: true,  
 }));
 
