@@ -5,7 +5,7 @@ import soundfile as sf
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python modelPipeline.py <audio_file_path>")
+        print("Usage: python3 modelPipeline.py <audio_file_path>")
         sys.exit(1)
 
     audio_file_path = sys.argv[1]

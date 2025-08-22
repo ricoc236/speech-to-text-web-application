@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+ 
+  app:
+    build: .
+    ports:
+      - "3001:3001"
+    environment:
+    
+      MONGO_URI: mongodb://mongo:27017/textify
+      
+      PORT: 3001
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
+      MONGO_NAME: ${MONGO_NAME}
+    depends_on:
+      - mongo 
+
+  mongo:
+    image: mongo:latest
+    ports:
+   
+      - "27017:27017"
+    volumes:
+     
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:

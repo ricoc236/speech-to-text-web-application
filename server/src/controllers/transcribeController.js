@@ -5,7 +5,6 @@ const path = require('path');
 const { getDB } = require('../../mongo/config/mongodb');
 
 async function transcribe(req, res) {
-
     try {
         if (!req.file) {
             return res.status(400).json({ message: 'No file uploaded' });
@@ -14,14 +13,14 @@ async function transcribe(req, res) {
         const audioPath = req.file.path;
         const resampledAudioPath = path.join(path.dirname(audioPath), `resampled_${req.file.filename}.wav`);
 
-    
-        const execAsync = (command) => {
+        const execAsync = (command, options) => {
             return new Promise((resolve, reject) => {
-                exec(command, (error, stdout, stderr) => {
+                exec(command, options, (error, stdout, stderr) => {
                     if (error) {
                         return reject(error);
                     }
                     if (stderr) {
+             
                         console.error(`stderr: ${stderr}`);
                     }
                     resolve(stdout);
@@ -29,7 +28,7 @@ async function transcribe(req, res) {
             });
         };
 
-        //convert audio to 16kHz using ffmpeg
+   
         const ffmpegCommand = `ffmpeg -i "${audioPath}" -ar 16000 "${resampledAudioPath}"`;
         try {
             await execAsync(ffmpegCommand);
@@ -37,25 +36,26 @@ async function transcribe(req, res) {
             console.error(`FFmpeg error: ${ffmpegError.message}`);
             return res.status(500).json({ message: 'Audio resampling failed.' });
         } finally {
-            // Ensure the original file is deleted
+   
             await fs.unlink(audioPath).catch(err => console.error('Failed to delete original temp file:', err));
         }
 
-        //run asrmodel script
-        const pythonCommand = `python asrModel/modelPipeline.py "${resampledAudioPath}"`;
+        // Run asrmodel script and clean the output
+        const pythonCommand = `python3 asrModel/modelPipeline.py "${resampledAudioPath}" 2>/dev/null`;
         let transcript = '';
         try {
             const pythonStdout = await execAsync(pythonCommand);
-            transcript = pythonStdout?.trim();
+            const outputLines = pythonStdout.split('\n').filter(line => line.trim() !== '');
+            transcript = outputLines[outputLines.length - 1] || '';
+            transcript = transcript.trim();
         } catch (pythonError) {
             console.error(`Python script error: ${pythonError.message}`);
             return res.status(500).json({ message: 'Transcription script failed.' });
         } finally {
-            
             await fs.unlink(resampledAudioPath).catch(err => console.error('Failed to delete resampled temp file:', err));
         }
 
-        //save to mongo 
+        // Save to mongo
         const token = req.cookies.token;
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const username = decoded.username;
