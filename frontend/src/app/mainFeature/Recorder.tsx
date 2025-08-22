@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from "react";
 import Navbar from "../../components/Navbar";
 import { MicrophoneIcon } from "@heroicons/react/24/solid"; 
 import Sidebar from "../../components/Sidebar";
-import { nav } from "framer-motion/client";
 import { useNavigate } from "react-router-dom";
 
 export default function Recorder() {
