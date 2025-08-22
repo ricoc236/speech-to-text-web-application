@@ -58,7 +58,7 @@ async function transcribe(req, res) {
         //save to mongo 
         const token = req.cookies.token;
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const username = decoded.user;
+        const username = decoded.username;
         
         let db = getDB();
         let transcribeCollection = db.collection('transcriptions');
@@ -76,10 +76,7 @@ async function transcribe(req, res) {
             { upsert: true }
         );
 
-        const userDocument = await transcribeCollection.findOne({ username: username });
-        const data_test = userDocument?.transcription; 
-
-        return res.status(200).json({ transcription: data_test });
+        return res.status(200).json({ transcript: transcript });
 
     } catch (error) {
         console.error('Transcription error:', error);

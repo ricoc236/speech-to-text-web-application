@@ -37,7 +37,7 @@ const Login = () => {
         }
 
         console.log("Login successful:", data);
-        navigate("/"); 
+        navigate("/recorder"); 
       } catch (err) {
         console.error(err);
         setError("Something went wrong. Please try again.");

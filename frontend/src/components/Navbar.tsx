@@ -24,11 +24,14 @@ return (
     <div className="fixed top-0 left-0 w-full z-50 shadow-xl bg-[#B3EBf2]"
     style={{height: `52px`}}>
 
-        <div className = "container mx-auto flex justify-between items-center h-full px-4">
+        <div className = "container mx-auto flex justify-between items-center h-full px-4 focus:outline-none focus:ring-0">
             <div className="flex items-center gap-4 md:gap-6">
-                  <button onClick={toggleSidebar} className="p-2 rounded hover:bg-gray-700">
+                {username && (
+                  <button onClick={toggleSidebar} className="p-2 rounded hover:bg-gray-700 focus:outline-none focus:ring-0">
                     {isOpen ? <X size={24} /> : <Menu size={24} />}
                   </button>
+                ) }
+
                   
                 <div className="">
                     <Link to="/" className="text-xl flex items-center text-primary-700 font-bol">
@@ -38,11 +41,9 @@ return (
                 </div>
 
             </div>
-       {/* Right Side */}
         <div className="flex items-center gap-4">
           {username ? (
             <div className="flex items-center gap-2">
-              {/* Circular Icon with first letter */}
               <div className="w-8 h-8 flex items-center justify-center rounded-full bg-black text-white font-semibold">
                 {username.charAt(0).toUpperCase()}
               </div>

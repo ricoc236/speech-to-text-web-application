@@ -8,10 +8,13 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const cors = require('cors');
 dotenv.config();
+
+
+/*routes*/
 const {connectDB, getDB} = require('../mongo/config/mongodb');
 const authRoutes = require('./routes/authRoute');
 const transcribeRoutes = require('./routes/transcribeRoute');
-
+const historyRoutes = require('./routes/historyRoute');
 
 const app = express();
 app.use(cookieParser());
@@ -38,6 +41,7 @@ async function start() {
         /*routes*/
         app.use('/auth', authRoutes);
         app.use('/transcribe', transcribeRoutes);
+        app.use('/history', historyRoutes); 
         const PORT = process.env.PORT;
         app.listen(PORT, () => {
                 console.log(`Server is running on port ${PORT}`);

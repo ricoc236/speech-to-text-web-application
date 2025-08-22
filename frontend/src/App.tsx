@@ -8,8 +8,7 @@ import Recorder from './app/mainFeature/Recorder'
 
 // layout
 import { SidebarProvider } from './components/SidebarContext'
-import Sidebar from './components/Sidebar'
-import Navbar from './components/Navbar'
+import NotFound from './app/NotFound'
 
 function App() {
   return (
@@ -19,6 +18,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/recorder" element={<Recorder />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
     </SidebarProvider>
   )
