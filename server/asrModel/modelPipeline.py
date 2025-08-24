@@ -10,24 +10,22 @@ def main():
 
     audio_file_path = sys.argv[1]
 
-    # Load audio file
+  
     audio_input, samplerate = sf.read(audio_file_path)
 
 
-    # Load model & processor
-    processor = Wav2Vec2Processor.from_pretrained("facebook/wav2vec2-base-960h")
-    model = Wav2Vec2ForCTC.from_pretrained("facebook/wav2vec2-base-960h")
+    processor = Wav2Vec2Processor.from_pretrained("OthmaneJ/distil-wav2vec2")
+    model = Wav2Vec2ForCTC.from_pretrained("OthmaneJ/distil-wav2vec2")
 
-
-    # Tokenize audio
+ 
     input_values = processor(audio_input, return_tensors="pt", padding="longest").input_values
-    # Run model
+
     logits = model(input_values).logits
 
     predicted_ids = torch.argmax(logits, dim=-1)
     transcription = processor.batch_decode(predicted_ids)
 
-    # Print transcription only
+
     print(transcription[0].strip())
 
 if __name__ == "__main__":
