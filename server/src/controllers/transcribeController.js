@@ -41,7 +41,7 @@ async function transcribe(req, res) {
         }
 
         // Run asrmodel script and clean the output
-        const pythonCommand = `python3 asrModel/modelPipeline.py "${resampledAudioPath}" 2>/dev/null`;
+        const pythonCommand = `python3 asrModel/modelPipeline.py "${resampledAudioPath}"`;
         let transcript = '';
         try {
             const pythonStdout = await execAsync(pythonCommand);
